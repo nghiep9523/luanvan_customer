@@ -75,11 +75,13 @@ function User() {
 		sql.connect(server.config, function (err) {
 			const request = new sql.Request();
 
-			request.input('userID', sql.NVarChar, payload);
+			request.input('userID', sql.NVarChar, payload.userID);
 
 			request.execute('uspGetUserInfo', (err, recordsets, returnValue, affected) => {
 				if (!err) {
-					res.status(200).send({status: 200, payload: recordsets[0]});
+					var data = recordsets[0][0];
+					delete data['password'];
+					res.status(200).send({status: 200, payload: data});
 				} else {
 					res.status(400).send({status: 400, message: "Something happened, please try again"});
 				}
