@@ -10,4 +10,8 @@ router.post('/register', function(req, res) {
  	user.register(req.body, res);
 });
 
+router.get('/info/:id', function(req, res) {
+ 	user.getUserInfo(req.params.id, res);
+});
+
 module.exports = router;
