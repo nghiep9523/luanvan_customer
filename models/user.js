@@ -74,18 +74,27 @@ function User() {
 	this.getUserInfo = function(payload, res) {
 		sql.connect(server.config, function (err) {
 			const request = new sql.Request();
-
-			request.input('userID', sql.NVarChar, payload.userID);
-
-			request.execute('uspGetUserInfo', (err, recordsets, returnValue, affected) => {
-				if (!err) {
-					var data = recordsets[0][0];
-					delete data['password'];
-					res.status(200).send({status: 200, payload: data});
-				} else {
-					res.status(400).send({status: 400, message: "Something happened, please try again"});
-				}
-			});
+			if (payload.userID) {
+				request.input('userID', sql.NVarChar, payload.userID);
+				request.execute('uspGetUserInfo', (err, recordsets, returnValue, affected) => {
+					if (!err) {
+						var data = recordsets[0][0];
+						delete data['password'];
+						res.status(200).send({status: 200, payload: data});
+					} else {
+						res.status(400).send({status: 400, message: "Something happened, please try again"});
+					}
+				});
+			} else {
+				request.execute('uspGetAllUser', (err, recordsets, returnValue, affected) => {
+					if (!err) {
+						var data = recordsets[0];
+						res.status(200).send({status: 200, payload: data});
+					} else {
+						res.status(400).send({status: 400, message: "Something happened, please try again"});
+					}
+				});
+			}
 		});
 	}
 }
