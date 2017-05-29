@@ -86,6 +86,7 @@ function User() {
 					}
 				});
 			} else {
+				console.log("in");
 				request.execute('uspGetAllUser', (err, recordsets, returnValue, affected) => {
 					if (!err) {
 						var data = recordsets[0];
