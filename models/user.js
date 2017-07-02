@@ -41,7 +41,7 @@ function User() {
 			var request = new sql.Request();
 			var username = payload.username;
 			var password = payload.password;
-			var email = payload.email;
+			var email = payload.email ? payload.email : null;
 			var fullname = payload.fullname;
 			var phone = payload.phone;
 			var currentDate = new Date();
@@ -63,8 +63,10 @@ function User() {
 			    } else {
 			    	if (err.number == 2627) {
 			    		res.status(400).send({status: 400, message: "Username already exist"});
+			    	} else if (err.number == 2601) {
+			    		res.status(400).send({status: 400, message: "This phone number or email has already been registered"});
 			    	} else {
-			    		res.status(400).send({status: 400, message: "Something happened, please try again"});
+			    		res.status(400).send({status: 400, message: "Something happened please try again later"});
 			    	}
 			    }
 			});
